@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "vector": "cpp"
+        "vector": "cpp",
+        "filesystem": "cpp"
     },
     "terminal.integrated.defaultProfile.windows": "MSYS2",
     "terminal.integrated.profiles.windows": {
