@@ -15,7 +15,7 @@ int current_oam_id;
 const int PAL = 0;
 
 
-struct Eye {
+struct Pupil {
     int oam_id;
 
     int x;
@@ -28,14 +28,14 @@ struct Eye {
 };
 
 
-std::vector<Eye> eyes;
+std::vector<Pupil> pupils;
 
 
 
 
 
-Eye make_eye(int x, int y) {
-    return Eye {
+Pupil make_pupil(int x, int y) {
+    return Pupil {
         .oam_id = current_oam_id++,
         .x = x,
         .y = y,
@@ -79,28 +79,28 @@ int main() {
     NF_InitSpriteBuffers();
     NF_InitSpriteSys(0);
 
-    // Load eye sprites
+    // Load pupil sprites
     NF_LoadSpriteGfx("pupil", 0, 16, 16);
     NF_LoadSpritePal("pupil", PAL);
     NF_VramSpriteGfx(0, 0, 0, false);
     NF_VramSpritePal(0, 0, PAL);
 
 
-    // Add the eyes
-    eyes.push_back(make_eye(100, 100));
-    eyes.push_back(make_eye(102, 40));
-    eyes.push_back(make_eye(71, 72));
-    eyes.push_back(make_eye(84, 56));
-    eyes.push_back(make_eye(101, 72));
-    eyes.push_back(make_eye(87, 91));
-    eyes.push_back(make_eye(120, 55));
-    eyes.push_back(make_eye(120, 88));
-    eyes.push_back(make_eye(137, 71));
+    // Add the pupils
+    pupils.push_back(make_pupil(100, 100));
+    pupils.push_back(make_pupil(102, 40));
+    pupils.push_back(make_pupil(71, 72));
+    pupils.push_back(make_pupil(84, 56));
+    pupils.push_back(make_pupil(101, 72));
+    pupils.push_back(make_pupil(87, 91));
+    pupils.push_back(make_pupil(120, 55));
+    pupils.push_back(make_pupil(120, 88));
+    pupils.push_back(make_pupil(137, 71));
 
-    // Create the sprites of the eyes
-    for (unsigned int i = 0; i < eyes.size(); i++) {
-        Eye eye = eyes[i];
-        NF_CreateSprite(0, eye.oam_id, 0, PAL, eye.x, eye.y);
+    // Create the sprites of the pupils
+    for (unsigned int i = 0; i < pupils.size(); i++) {
+        Pupil pupil = pupils[i];
+        NF_CreateSprite(0, pupil.oam_id, 0, PAL, pupil.x, pupil.y);
     }
 
     // Create on both screens on layer 0
@@ -116,28 +116,28 @@ int main() {
         float y = sin((float) frame / 50.0) * 10.0;
         NF_ScrollBg(0, 0, 0, y);
 
-        // Move eyes
-        for (unsigned int i = 0; i < eyes.size(); i++) {
-            Eye eye = eyes[i];
+        // Move pupils
+        for (unsigned int i = 0; i < pupils.size(); i++) {
+            Pupil pupil = pupils[i];
 
-            // Move the eye
-            NF_MoveSprite(0, eye.oam_id, eye.x + 6   + eye.x_pupil_offset, eye.y - y + 8 + eye.y_pupil_offset);
+            // Move the pupil
+            NF_MoveSprite(0, pupil.oam_id, pupil.x + 6   + pupil.x_pupil_offset, pupil.y - y + 8 + pupil.y_pupil_offset);
 
             // Smoothly move the pupil
-            eye.x_pupil_offset = leerp(eye.x_pupil_offset_to, eye.x_pupil_offset, 0.9);
-            eye.y_pupil_offset = leerp(eye.x_pupil_offset_to, eye.y_pupil_offset, 0.9);
+            pupil.x_pupil_offset = leerp(pupil.x_pupil_offset_to, pupil.x_pupil_offset, 0.9);
+            pupil.y_pupil_offset = leerp(pupil.x_pupil_offset_to, pupil.y_pupil_offset, 0.9);
 
             // Update the looking offset
-            eye.t_until_new_looking_offset--;
-            if (eye.t_until_new_looking_offset <= 0) {
-                eye.x_pupil_offset_to = Random::get(-2, 2);
-                eye.y_pupil_offset_to = Random::get(-2, 2);
-                eye.t_until_new_looking_offset = Random::get(50, 100);
+            pupil.t_until_new_looking_offset--;
+            if (pupil.t_until_new_looking_offset <= 0) {
+                pupil.x_pupil_offset_to = Random::get(-2, 2);
+                pupil.y_pupil_offset_to = Random::get(-2, 2);
+                pupil.t_until_new_looking_offset = Random::get(50, 100);
             }
 
 
-            // Update the eye
-            eyes[i] = eye;
+            // Update the pupil
+            pupils[i] = pupil;
         }
 
 
